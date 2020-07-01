@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PracticeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AuthorInfo">
+          <Key>
+            <PropertyRef Name="AID" />
+          </Key>
+          <Property Name="AID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AuthorName" Type="varchar(max)" />
+          <Property Name="BookID" Type="int" Nullable="false" />
+          <Property Name="City" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="BookInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bookname" Type="varchar(max)" />
+          <Property Name="AuthorName" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK__AuthorInf__BookI__4AB81AF0">
+          <End Role="BookInfo" Type="Self.BookInfo" Multiplicity="1" />
+          <End Role="AuthorInfo" Type="Self.AuthorInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuthorInfo">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AuthorBook" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Authorname" Type="varchar(max)" Mode="In" />
+        </Function>
+        <EntityContainer Name="PracticeModelStoreContainer">
+          <EntitySet Name="AuthorInfo" EntityType="Self.AuthorInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookInfo" EntityType="Self.BookInfo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AuthorInf__BookI__4AB81AF0" Association="Self.FK__AuthorInf__BookI__4AB81AF0">
+            <End Role="BookInfo" EntitySet="BookInfo" />
+            <End Role="AuthorInfo" EntitySet="AuthorInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PracticeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AuthorInfo">
+          <Key>
+            <PropertyRef Name="AID" />
+          </Key>
+          <Property Name="AID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BookID" Type="Int32" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BookInfo" Relationship="Self.FK__AuthorInf__BookI__4AB81AF0" FromRole="AuthorInfo" ToRole="BookInfo" />
+        </EntityType>
+        <EntityType Name="BookInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bookname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AuthorName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AuthorInfoes" Relationship="Self.FK__AuthorInf__BookI__4AB81AF0" FromRole="BookInfo" ToRole="AuthorInfo" />
+        </EntityType>
+        <Association Name="FK__AuthorInf__BookI__4AB81AF0">
+          <End Role="BookInfo" Type="Self.BookInfo" Multiplicity="1" />
+          <End Role="AuthorInfo" Type="Self.AuthorInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookInfo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AuthorInfo">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PracticeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AuthorInfoes" EntityType="Self.AuthorInfo" />
+          <EntitySet Name="BookInfoes" EntityType="Self.BookInfo" />
+          <AssociationSet Name="FK__AuthorInf__BookI__4AB81AF0" Association="Self.FK__AuthorInf__BookI__4AB81AF0">
+            <End Role="BookInfo" EntitySet="BookInfoes" />
+            <End Role="AuthorInfo" EntitySet="AuthorInfoes" />
+          </AssociationSet>
+          <FunctionImport Name="AuthorBook" ReturnType="Collection(PracticeModel.AuthorBook_Result)">
+            <Parameter Name="Authorname" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="AuthorBook_Result">
+          <Property Type="Int32" Name="AId" Nullable="false" />
+          <Property Type="String" Name="Authorname" Nullable="true" />
+          <Property Type="String" Name="City" Nullable="true" />
+          <Property Type="String" Name="Bookname" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PracticeModelStoreContainer" CdmEntityContainer="PracticeEntities">
+          <EntitySetMapping Name="AuthorInfoes">
+            <EntityTypeMapping TypeName="PracticeModel.AuthorInfo">
+              <MappingFragment StoreEntitySet="AuthorInfo">
+                <ScalarProperty Name="AID" ColumnName="AID" />
+                <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookInfoes">
+            <EntityTypeMapping TypeName="PracticeModel.BookInfo">
+              <MappingFragment StoreEntitySet="BookInfo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Bookname" ColumnName="Bookname" />
+                <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AuthorBook" FunctionName="PracticeModel.Store.AuthorBook">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PracticeModel.AuthorBook_Result">
+                <ScalarProperty Name="AId" ColumnName="AId" />
+                <ScalarProperty Name="Authorname" ColumnName="Authorname" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Bookname" ColumnName="Bookname" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
